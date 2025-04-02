@@ -10,7 +10,11 @@ import {
   CardContent,
   Grid,
   Alert,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
@@ -156,55 +160,63 @@ const YouTubeViewer = () => {
       </Box>
 
       {videos.map((playlist, playlistIndex) => (
-        <Box key={playlistIndex} sx={{ mb: 6 }}>
-          <Typography variant="h5" gutterBottom sx={{ mb: 3, borderBottom: '2px solid #eee', pb: 1 }}>
-            {playlist.url ? `Playlist ${playlistIndex + 1}` : 'Videos'}
-          </Typography>
-          <Grid container spacing={3}>
-            {playlist.videos.map((video, videoIndex) => {
-              const videoId = getVideoId(video.link);
-              return (
-                <Grid item xs={12} md={6} key={videoIndex}>
-                  <Card sx={{ height: '100%' }}>
-                    <CardContent>
-                      <Typography 
-                        variant="h6" 
-                        gutterBottom 
-                        sx={{ 
-                          mb: 2,
-                          minHeight: '3em',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden'
-                        }}
-                      >
-                        {video.title}
-                      </Typography>
-                      <Box sx={{ position: 'relative', paddingTop: '56.25%', mb: 2 }}>
-                        <iframe
-                          style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            borderRadius: '4px'
+        <Accordion key={playlistIndex} defaultExpanded sx={{ mb: 2 }}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls={`playlist-${playlistIndex}-content`}
+            id={`playlist-${playlistIndex}-header`}
+          >
+            <Typography variant="h5" sx={{ color: 'primary.main' }}>
+              {playlist.url ? `Playlist ${playlistIndex + 1}` : 'Videos'}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid container spacing={3}>
+              {playlist.videos.map((video, videoIndex) => {
+                const videoId = getVideoId(video.link);
+                return (
+                  <Grid item xs={12} md={6} key={videoIndex}>
+                    <Card sx={{ height: '100%' }}>
+                      <CardContent>
+                        <Typography 
+                          variant="h6" 
+                          gutterBottom 
+                          sx={{ 
+                            mb: 2,
+                            minHeight: '3em',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden'
                           }}
-                          src={`https://www.youtube.com/embed/${videoId}`}
-                          title={video.title}
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        />
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              );
-            })}
-          </Grid>
-        </Box>
+                        >
+                          {video.title}
+                        </Typography>
+                        <Box sx={{ position: 'relative', paddingTop: '56.25%', mb: 2 }}>
+                          <iframe
+                            style={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              width: '100%',
+                              height: '100%',
+                              borderRadius: '4px'
+                            }}
+                            src={`https://www.youtube.com/embed/${videoId}`}
+                            title={video.title}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
       ))}
     </Container>
   );
