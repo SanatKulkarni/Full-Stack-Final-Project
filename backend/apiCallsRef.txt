@@ -1,0 +1,39 @@
+# Get all playlists
+Invoke-RestMethod -Uri "http://localhost:5000/api/playlists" -Method Get
+
+# Get videos from specific playlist
+$playlistUrl = "https://www.youtube.com/watch?v=dJBkDGEzOPQ&list=PLuYB6t6povcLgoHWLJgk-VeMQ0Rscjw03"
+Invoke-RestMethod -Uri "http://localhost:5000/api/videos/$([Uri]::EscapeDataString($playlistUrl))" -Method Get
+
+# Scrape new playlist
+$body = @{
+    playlistUrl = "https://www.youtube.com/watch?v=dJBkDGEzOPQ&list=PLuYB6t6povcLgoHWLJgk-VeMQ0Rscjw03"
+} | ConvertTo-Json
+Invoke-RestMethod -Uri "http://localhost:5000/api/scrape-playlist" -Method Post -Body $body -ContentType "application/json"
+
+# Create new todo
+$body = @{
+    title = "Complete Project"
+    description = "Finish the MERN stack project"
+    completed = $false
+} | ConvertTo-Json
+Invoke-RestMethod -Uri "http://localhost:5000/api/todos" -Method Post -Body $body -ContentType "application/json"
+
+# Get all todos
+Invoke-RestMethod -Uri "http://localhost:5000/api/todos" -Method Get
+
+# Get specific todo
+$todoId = "your-todo-id"
+Invoke-RestMethod -Uri "http://localhost:5000/api/todos/$todoId" -Method Get
+
+# Update todo
+$todoId = "your-todo-id"
+$body = @{
+    title = "Updated Title"
+    completed = $true
+} | ConvertTo-Json
+Invoke-RestMethod -Uri "http://localhost:5000/api/todos/$todoId" -Method Put -Body $body -ContentType "application/json"
+
+# Delete todo
+$todoId = "your-todo-id"
+Invoke-RestMethod -Uri "http://localhost:5000/api/todos/$todoId" -Method Delete
